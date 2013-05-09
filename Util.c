@@ -21,6 +21,27 @@ VOID WaitForESC(EFI_SYSTEM_TABLE* systab)
 	}
 }
 
+VOID* Allocate(UINTN size, EFI_SYSTEM_TABLE* systab)
+{
+	VOID* data;
+	EFI_STATUS res = systab->BootServices->AllocatePool(EfiLoaderData, size,
+			&data);
+
+	if (res)
+	{
+		return NULL ;
+	}
+	else
+	{
+		return data;
+	}
+}
+
+VOID Free(VOID* mem, EFI_SYSTEM_TABLE* systab)
+{
+	systab->BootServices->FreePool(mem);
+}
+
 EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 		CHAR16* filename, VOID** dataPtr, UINTN* size)
 {

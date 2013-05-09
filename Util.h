@@ -5,7 +5,11 @@
 #include <Library/UefiLib.h>
 #include <Library/UefiApplicationEntryPoint.h>
 
-VOID WaitForESC(EFI_SYSTEM_TABLE* systab);
+/**
+ * Waits for escape key to be pressed
+ * @param systab System table
+ * @return
+ */VOID WaitForESC(EFI_SYSTEM_TABLE* systab);
 
 /**
  * Loads a file from the ESP. The caller is responsible for freeing the memory.
@@ -18,5 +22,19 @@ VOID WaitForESC(EFI_SYSTEM_TABLE* systab);
  */
 EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 		CHAR16* filename, VOID** dataPtr, UINTN* size);
+
+/**
+ * Allocate a block of memory.
+ * @param size Size in bytes
+ * @param systab Pointer to the system table.
+ * @return Pointer to memory, or NULL on failure.
+ */VOID* Allocate(UINTN size, EFI_SYSTEM_TABLE* systab);
+
+/**
+ * Frees memory.
+ * @param mem
+ * @param systab System table
+ * @return
+ */VOID Free(VOID* mem, EFI_SYSTEM_TABLE* systab);
 
 #endif
