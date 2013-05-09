@@ -22,7 +22,7 @@
  */
 typedef struct _TABLE_STACK
 {
-	VOID* Tables[TABLE_STACK_SIZE];
+	void* Tables[TABLE_STACK_SIZE];
 	UINTN TableCount;
 } TABLE_STACK;
 
@@ -62,5 +62,7 @@ typedef struct _SD_HEADER
  * Size of the system description table header
  */
 #define SD_HEADER_SIZE 36
+
+
 
 #endif

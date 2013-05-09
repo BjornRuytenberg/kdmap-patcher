@@ -3,7 +3,7 @@
 #include <Protocol/SimpleFileSystem.h>
 #include <Guid/FileInfo.h>
 
-VOID WaitForESC(EFI_SYSTEM_TABLE* systab)
+void WaitForESC(EFI_SYSTEM_TABLE* systab)
 {
 	for (;;)
 	{
@@ -21,9 +21,9 @@ VOID WaitForESC(EFI_SYSTEM_TABLE* systab)
 	}
 }
 
-VOID* Allocate(UINTN size, EFI_SYSTEM_TABLE* systab)
+void* Allocate(UINTN size, EFI_SYSTEM_TABLE* systab)
 {
-	VOID* data;
+	void* data;
 	EFI_STATUS res = systab->BootServices->AllocatePool(EfiLoaderData, size,
 			&data);
 
@@ -37,7 +37,7 @@ VOID* Allocate(UINTN size, EFI_SYSTEM_TABLE* systab)
 	}
 }
 
-VOID Free(VOID* mem, EFI_SYSTEM_TABLE* systab)
+void Free(void* mem, EFI_SYSTEM_TABLE* systab)
 {
 	systab->BootServices->FreePool(mem);
 }
@@ -55,7 +55,7 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 	//get image info
 	EFI_LOADED_IMAGE_PROTOCOL* img_proto;
 	res = BS->HandleProtocol(ImageHandle, &LoadedImageProtocolGuid,
-			(VOID**) &img_proto);
+			(void**) &img_proto);
 
 	if (res)
 	{
@@ -108,7 +108,7 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 		return EFI_NOT_FOUND ;
 	}
 
-	res = BS->AllocatePool(EfiLoaderData, file_info_size, (VOID**) &file_info);
+	res = BS->AllocatePool(EfiLoaderData, file_info_size, (void**) &file_info);
 
 	if (res)
 	{
@@ -117,7 +117,7 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 	}
 
 	res = file->GetInfo(file, &FileInfoGuid, &file_info_size,
-			(VOID*) file_info);
+			(void*) file_info);
 
 	if (res)
 	{
@@ -131,8 +131,8 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 	BS->FreePool(file_info);
 	file_info = NULL;
 
-	VOID* data = NULL;
-	res = BS->AllocatePool(EfiLoaderData, file_size, (VOID**) &data);
+	void* data = NULL;
+	res = BS->AllocatePool(EfiLoaderData, file_size, (void**) &data);
 
 	if (res)
 	{
@@ -141,7 +141,7 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 	}
 
 	//read the file
-	res = file->Read(file, &file_size, (VOID*) data);
+	res = file->Read(file, &file_size, (void*) data);
 
 	if (res)
 	{

@@ -9,7 +9,7 @@ EFI_STATUS Boot(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab)
 	EFI_STATUS res;
 
 	//load boot file
-	VOID* data = NULL;
+	void* data = NULL;
 	UINTN data_size = 0;
 	res = LoadFile(ImageHandle, systab, boot_filename, &data, &data_size);
 
@@ -27,7 +27,7 @@ EFI_STATUS Boot(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab)
 	//get this image's info
 	EFI_LOADED_IMAGE_PROTOCOL* img_proto;
 	res = systab->BootServices->HandleProtocol(ImageHandle,
-			&LoadedImageProtocolGuid, (VOID**) &img_proto);
+			&LoadedImageProtocolGuid, (void**) &img_proto);
 
 	if (res)
 	{
@@ -52,7 +52,7 @@ EFI_STATUS Boot(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab)
 	//get new image info
 	EFI_LOADED_IMAGE_PROTOCOL* new_img_proto;
 	res = systab->BootServices->HandleProtocol(new_img_handle,
-			&LoadedImageProtocolGuid, (VOID**) &new_img_proto);
+			&LoadedImageProtocolGuid, (void**) &new_img_proto);
 
 	if (res)
 	{
