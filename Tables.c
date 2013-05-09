@@ -150,7 +150,7 @@ void PatchTables(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 		UINTN table_size = current->Length;
 
 		//allocate new
-		SD_HEADER* new_table = Allocate(table_size, systab);
+		SD_HEADER* new_table = AllocateACPI(table_size, systab);
 
 		//copy it
 		systab->BootServices->CopyMem((void*) new_table, (void*) current,
@@ -167,7 +167,7 @@ void PatchTables(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 		current->Signature[3] = 0;
 	}
 
-	SD_HEADER* new_slic = Allocate(slic_size, systab);
+	SD_HEADER* new_slic = AllocateACPI(slic_size, systab);
 	systab->BootServices->CopyMem((void*) new_slic, (void*) slic_data,
 			slic_size);
 
@@ -214,7 +214,7 @@ void PatchTables(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 	//figure out RSDT length
 	UINTN rsdt_length = SD_HEADER_SIZE + sizeof(UINT32) * new_tables.TableCount;
 
-	SD_HEADER* rsdt = (SD_HEADER*) Allocate(rsdt_length, systab);
+	SD_HEADER* rsdt = (SD_HEADER*) AllocateACPI(rsdt_length, systab);
 
 	rsdt->Signature[0] = 'R';
 	rsdt->Signature[1] = 'S';
@@ -249,7 +249,7 @@ void PatchTables(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 	if (acpi_version == 2)
 	{
 		xsdt_length = SD_HEADER_SIZE + sizeof(UINT64) * new_tables.TableCount;
-		xsdt = (SD_HEADER*) Allocate(xsdt_length, systab);
+		xsdt = (SD_HEADER*) AllocateACPI(xsdt_length, systab);
 
 		xsdt->Signature[0] = 'X';
 		xsdt->Signature[1] = 'S';

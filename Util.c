@@ -38,6 +38,22 @@ void* Allocate(UINTN size, EFI_SYSTEM_TABLE* systab)
 	}
 }
 
+void* AllocateACPI(UINTN size, EFI_SYSTEM_TABLE* systab)
+{
+	void* data;
+	EFI_STATUS res = systab->BootServices->AllocatePool(EfiACPIReclaimMemory,
+			size, &data);
+
+	if (res)
+	{
+		return NULL ;
+	}
+	else
+	{
+		return data;
+	}
+}
+
 void Free(void* mem, EFI_SYSTEM_TABLE* systab)
 {
 	systab->BootServices->FreePool(mem);

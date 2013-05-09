@@ -40,6 +40,14 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 void* Allocate(UINTN size, EFI_SYSTEM_TABLE* systab);
 
 /**
+ * Allocates memory in the ACPI region
+ * @param size Size in bytes
+ * @param systab Pointer to the system table.
+ * @return Pointer to memory, or NULL on failure.
+ */
+void* AllocateACPI(UINTN size, EFI_SYSTEM_TABLE* systab);
+
+/**
  * Frees memory.
  * @param mem
  * @param systab System table
