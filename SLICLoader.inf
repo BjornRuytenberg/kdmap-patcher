@@ -1,0 +1,20 @@
+[Defines]
+INF_VERSION = 0x00010005
+BASE_NAME = SLICLoader
+FILE_GUID = 2b427299-2b54-4d33-8787-e2356101868c
+MODULE_TYPE = UEFI_APPLICATION
+VERSION_STRING = 1.0
+ENTRY_POINT = UefiMain
+
+[Sources]
+Util.c
+Boot.c
+SLICLoader.c
+
+[Packages]
+MdePkg/MdePkg.dec
+MdeModulePkg/MdeModulePkg.dec
+
+[LibraryClasses]
+UefiApplicationEntryPoint
+UefiLib
