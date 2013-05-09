@@ -6,6 +6,11 @@
 #include <Library/UefiApplicationEntryPoint.h>
 
 /**
+ * @file Util.h
+ * Utilities and shortcuts.
+ */
+
+/**
  * Waits for escape key to be pressed
  * @param systab System table
  * @return

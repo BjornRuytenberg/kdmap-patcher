@@ -8,6 +8,12 @@
 #include "Util.h"
 
 /**
+ * @file Boot.h
+ *
+ * Handles loading another boot manager.
+ */
+
+/**
  * Loads and starts the standard boot manager.
  * @param ImageHandle The current image handle.
  * @param SystemTable The system table.
