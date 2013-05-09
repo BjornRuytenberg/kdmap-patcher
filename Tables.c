@@ -61,7 +61,7 @@ BOOLEAN IsTableType(SD_HEADER* table, CHAR8* sig)
 void FindAllTables(RSDP_TABLE* rsdp, TABLE_STACK* stack)
 {
 	UINTN i;
-	UINTN acpi_version = rsdp->Revision == 2 ? 2 : 1;
+	UINTN acpi_version = rsdp->Revision != 0 ? 2 : 1;
 
 	if (acpi_version == 1)
 	{
@@ -125,7 +125,7 @@ void PatchTables(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 		}
 	}
 
-	UINTN acpi_version = rsdp->Revision == 2 ? 2 : 1;
+	UINTN acpi_version = rsdp->Revision != 0 ? 2 : 1;
 
 	//Get all tables
 	TABLE_STACK old_tables;

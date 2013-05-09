@@ -69,9 +69,6 @@ EFI_STATUS Boot(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab)
 	new_img_proto->FilePath = file_path;
 
 	//Start the new image
-	Print(L"\r\nPress ESC to boot.\r\n\r\n");
-	WaitForESC(systab);
-
 	systab->BootServices->StartImage(new_img_handle, 0, NULL );
 
 	return EFI_SUCCESS;
