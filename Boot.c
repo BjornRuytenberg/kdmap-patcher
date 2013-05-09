@@ -5,7 +5,7 @@
 EFI_STATUS Boot(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab)
 {
 	EFI_GUID LoadedImageProtocolGuid = EFI_LOADED_IMAGE_PROTOCOL_GUID;
-	CHAR16 boot_filename[] = L"\\EFI\\Microsoft\\Boot\\bootmgfw.efi";
+	CHAR16 boot_filename[] = L"\\EFI\\Microsoft\\Boot\\bootmgfw.efi.orig";
 	EFI_STATUS res;
 
 	//load boot file

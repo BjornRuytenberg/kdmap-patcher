@@ -7,29 +7,40 @@ EFIAPI EFI_STATUS UefiMain(EFI_HANDLE ImageHandle,
 {
 	EFI_STATUS res;
 
-	//load file
-	void* data;
-	UINTN size;
-
-	res = LoadFile(ImageHandle, SystemTable,
-			L"\\EFI\\Microsoft\\Boot\\slic.bin", &data, &size, NULL );
+	//Attempt to load SLIC data
+	CHAR16 slic_filename[] = L"\\EFI\\Microsoft\\Boot\\slic.bin";
+	void* slic_data;
+	UINTN slic_size;
+	res = LoadFile(ImageHandle, SystemTable, slic_filename, &slic_data,
+			&slic_size, NULL );
 
 	if (res)
 	{
-		ErrorPrint(L"Failed to get new SLIC.\r\n");
+		//load file failed
+		ErrorPrint(L"Warning: Failed to find slic.bin.\r\n");
+		SystemTable->BootServices->Stall(2000000);
 	}
 	else
 	{
-		PatchTables(ImageHandle, SystemTable, data, size);
+		//patch tables
+		res = PatchTables(ImageHandle, SystemTable, slic_data, slic_size);
+		if (res)
+		{
+			ErrorPrint(L"Warning: Failed to patch SLIC table.\r\n");
+			SystemTable->BootServices->Stall(2000000);
+		}
 	}
 
+	//boot
 	res = Boot(ImageHandle, SystemTable);
 
 	if (res)
 	{
-		ErrorPrint(L"Failed to boot. Error %d\r\n", res);
+		ErrorPrint(L"Error: Could not load new boot manager.\r\n");
+		ErrorPrint(L"\r\nPress ESC to exit.\r\n\r\n");
 		WaitForESC(SystemTable);
+		return EFI_NOT_FOUND ;
 	}
 
-	return 0;
+	return EFI_SUCCESS;
 }

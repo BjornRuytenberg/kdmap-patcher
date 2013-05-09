@@ -95,7 +95,7 @@ void FindAllTables(RSDP_TABLE* rsdp, TABLE_STACK* stack)
 	}
 }
 
-void PatchTables(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
+EFI_STATUS PatchTables(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 		void* slic_data, UINTN slic_size)
 {
 	EFI_GUID rsdp_2_guid = EFI_ACPI_20_TABLE_GUID;
@@ -121,7 +121,7 @@ void PatchTables(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 		{
 			//cant find it...
 			ErrorPrint(L"Can't find RSDP!\r\n");
-			return;
+			return EFI_NOT_FOUND ;
 		}
 	}
 
@@ -302,4 +302,5 @@ void PatchTables(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 	}
 
 	//Complete.
+	return EFI_SUCCESS;
 }

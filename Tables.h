@@ -140,7 +140,7 @@ void FindAllTables(RSDP_TABLE* rsdp, TABLE_STACK* stack);
  * @param slic_data Pointer to the new SLIC data
  * @param slic_size Size of the new SLIC
  */
-void PatchTables(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
+EFI_STATUS PatchTables(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 		void* slic_data, UINTN slic_size);
 
 #endif
