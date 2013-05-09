@@ -63,6 +63,65 @@ typedef struct _SD_HEADER
  */
 #define SD_HEADER_SIZE 36
 
+/**
+ * Casts a UINT32 to a SD_HEADER*
+ * @param i
+ * @return
+ */
+SD_HEADER* Int32ToTable(UINT32 i);
 
+/**
+ * Casts a UINT64 to a SD_HEADER*
+ * @param i
+ * @return
+ */
+SD_HEADER* Int64ToTable(UINT64 i);
+
+/**
+ * Gets a pointer to the RSDT table
+ * @param rsdp The RSDP table
+ * @return
+ */
+SD_HEADER* GetRSDT(RSDP_TABLE* rsdp);
+
+/**
+ * Gets a pointer tot he XSDT table
+ * @param rsdp The RSDP table
+ * @return
+ */
+SD_HEADER* GetXSDT(RSDP_TABLE* rsdp);
+
+/**
+ * Returns an array of pointers (as uint32) to RSDT tables
+ * @param rsdt The RSDT table
+ * @param[out] count Sets the number of tables
+ * @return
+ */
+UINT32* GetRSDTTables(SD_HEADER* rsdt, UINTN* count);
+
+/**
+ * Returs an array of poitners (as uint64) to XSDT tables.
+ * @param xsdt The XSDT table
+ * @param[out] count The number of tables
+ * @return
+ */
+UINT64* GetXSDTTables(SD_HEADER* xsdt, UINTN* count);
+
+/**
+ * Calculates the checksum for a block of data.
+ * @param data Pointer to the data to sum
+ * @param count Length in bytes of the data to sum
+ * @param exclude Offset from data of a byte to exclude from the sum
+ * @return The sum
+ */
+UINT8 GetChecksum(void* data, UINTN count, UINTN exclude);
+
+/**
+ * Compares a table's signature to a string.
+ * @param table The table to compare
+ * @param sig The signature. Must be a 4-byte 0-terminated string, so 5 bytes in total.
+ * @return True if it matches, false otherwise.
+ */
+BOOLEAN IsTableType(SD_HEADER* table, CHAR8* sig);
 
 #endif
