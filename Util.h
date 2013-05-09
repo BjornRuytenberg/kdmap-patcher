@@ -24,10 +24,12 @@ void WaitForESC(EFI_SYSTEM_TABLE* systab);
  * @param filename The file path to load.
  * @param[out] dataPtr Pointer to pointer to the buffer.
  * @param[out] size Pointer to the variable that will store the size.
+ * @param[out] dev_path Pointer to pointer to set to device path. May be NULL
  * @return an EFI_STATUS
  */
 EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
-		CHAR16* filename, void** dataPtr, UINTN* size);
+		CHAR16* filename, void** dataPtr, UINTN* size,
+		EFI_DEVICE_PATH_PROTOCOL** dev_path);
 
 /**
  * Allocate a block of memory.

@@ -12,7 +12,7 @@ EFIAPI EFI_STATUS UefiMain(EFI_HANDLE ImageHandle,
 	UINTN size;
 
 	res = LoadFile(ImageHandle, SystemTable,
-			L"\\EFI\\Microsoft\\Boot\\slic.bin", &data, &size);
+			L"\\EFI\\Microsoft\\Boot\\slic.bin", &data, &size, NULL );
 
 	if (res)
 	{

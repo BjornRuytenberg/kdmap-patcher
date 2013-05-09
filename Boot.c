@@ -11,7 +11,10 @@ EFI_STATUS Boot(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab)
 	//load boot file
 	void* data = NULL;
 	UINTN data_size = 0;
-	res = LoadFile(ImageHandle, systab, boot_filename, &data, &data_size);
+
+	EFI_DEVICE_PATH_PROTOCOL* file_path;
+	res = LoadFile(ImageHandle, systab, boot_filename, &data, &data_size,
+			&file_path);
 
 	if (res == EFI_NOT_FOUND )
 	{
@@ -63,7 +66,7 @@ EFI_STATUS Boot(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab)
 	//set image data
 	new_img_proto->DeviceHandle = img_proto->DeviceHandle;
 	new_img_proto->ParentHandle = NULL;
-	new_img_proto->FilePath = NULL; //maybe?
+	new_img_proto->FilePath = file_path;
 
 	//Start the new image
 	Print(L"\r\nPress ESC to boot.\r\n\r\n");

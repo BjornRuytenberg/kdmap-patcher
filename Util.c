@@ -2,6 +2,7 @@
 #include <Protocol/LoadedImage.h>
 #include <Protocol/SimpleFileSystem.h>
 #include <Guid/FileInfo.h>
+#include <Library/DevicePathLib.h>
 
 void WaitForESC(EFI_SYSTEM_TABLE* systab)
 {
@@ -43,7 +44,8 @@ void Free(void* mem, EFI_SYSTEM_TABLE* systab)
 }
 
 EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
-		CHAR16* filename, VOID** dataPtr, UINTN* size)
+		CHAR16* filename, VOID** dataPtr, UINTN* size,
+		EFI_DEVICE_PATH_PROTOCOL** dev_path)
 {
 	EFI_GUID LoadedImageProtocolGuid = EFI_LOADED_IMAGE_PROTOCOL_GUID;
 	EFI_GUID FileInfoGuid = EFI_FILE_INFO_ID;
@@ -124,6 +126,11 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 		BS->FreePool(file_info);
 		ErrorPrint(L"Failed to stat file '%s'. (Error %d)\r\n", filename, res);
 		return EFI_NOT_FOUND ;
+	}
+
+	if (dev_path != NULL )
+	{
+		*dev_path = FileDevicePath(img_device_handle, filename);
 	}
 
 	UINT64 file_size = file_info->FileSize;
