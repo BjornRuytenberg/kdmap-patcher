@@ -124,4 +124,23 @@ UINT8 GetChecksum(void* data, UINTN count, UINTN exclude);
  */
 BOOLEAN IsTableType(SD_HEADER* table, CHAR8* sig);
 
+//Actual do-stuff functions
+
+/**
+ * Searches for all tables via the RSDP, and adds them to a table stack
+ * @param rsdp The RSDP table pointer.
+ * @param stack Pointer to the TABLE_STACK object to fill.
+ */
+void FindAllTables(RSDP_TABLE* rsdp, TABLE_STACK* stack);
+
+/**
+ * Patches the ACPI tables, replacing the SLIC and OEM ids
+ * @param ImageHandle The loaded image handle
+ * @param systab The system table pointer
+ * @param slic_data Pointer to the new SLIC data
+ * @param slic_size Size of the new SLIC
+ */
+void PatchTables(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
+		void* slic_data, UINTN slic_size);
+
 #endif
