@@ -43,7 +43,7 @@ kdmap-patcher requires:
 
 ### Linux kernel 5.0 or later
 
-- [Building](#using-edk2) a copy of kdmap-patcher.
+- [Build](#using-edk2) a copy of kdmap-patcher.
 - From the release ZIP or your build folder, copy `kdmap-patcher.efi` to the folder `/boot/efi/EFI/boot` using root privileges.
 - Depending on your boot configuration, in the latter folder, you can either choose to:
 	- Configure your default boot entry in UEFI to reference `kdmap-patcher.efi` (recommended if supported by your UEFI), or
