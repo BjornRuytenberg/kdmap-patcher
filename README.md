@@ -30,7 +30,7 @@ kdmap-patcher requires:
 - [Build](#using-visualuefi) a copy of kdmap-patcher.
 - Open a Command Prompt with administrator privileges.
 - Mount the EFI system partition: `mountvol T: /S`.
-- From the release ZIP or your build folder, copy `kdmap-patcher.efi` to your EFI System Partition: `copy kdmap-patcher.efi T:\EFI\Microsoft\Boot`
+- From your build folder, copy `kdmap-patcher.efi` to your EFI System Partition: `copy kdmap-patcher.efi T:\EFI\Microsoft\Boot`
 - Rename the Windows bootloader: `ren T:\EFI\Microsoft\Boot\bootmgfw.efi T:\EFI\Microsoft\Boot\bootmgfworg.efi`
 - Rename `kdmap-patcher.efi` to take the Windows bootloader's filename: `ren T:\EFI\Microsoft\Boot\kdmap-patcher.efi T:\EFI\Microsoft\Boot\bootmgfw.efi`
 - Reboot your system. Observe that kdmap-patcher hotpatches the DMA remapping opt-in flag in memory, and subsequently loads Windows.
@@ -44,7 +44,7 @@ kdmap-patcher requires:
 ### Linux kernel 5.0 or later
 
 - [Build](#using-edk2) a copy of kdmap-patcher.
-- From the release ZIP or your build folder, copy `kdmap-patcher.efi` to the folder `/boot/efi/EFI/boot` using root privileges.
+- From your build folder, copy `kdmap-patcher.efi` to the folder `/boot/efi/EFI/boot` using root privileges.
 - Depending on your boot configuration, in the latter folder, you can either choose to:
 	- Configure your default boot entry in UEFI to reference `kdmap-patcher.efi` (recommended if supported by your UEFI), or
 	- Replace `bootx64.efi` with `kdmap-patcher.efi`.
