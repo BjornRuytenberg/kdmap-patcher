@@ -1,16 +1,16 @@
 [Defines]
-INF_VERSION = 0x00010005
-BASE_NAME = SLICLoader
-FILE_GUID = 2b427299-2b54-4d33-8787-e2356101868c
+INF_VERSION = 0x00013370
+BASE_NAME = kdmap-patcher
+FILE_GUID = 80d7014e-18c6-467c-ae98-243e278791e6
 MODULE_TYPE = UEFI_APPLICATION
 VERSION_STRING = 1.0
 ENTRY_POINT = UefiMain
 
 [Sources]
-Util.c
-Tables.c
-Boot.c
-SLICLoader.c
+util.c
+tables.c
+boot.c
+kdmap-patcher.c
 
 [Packages]
 MdePkg/MdePkg.dec

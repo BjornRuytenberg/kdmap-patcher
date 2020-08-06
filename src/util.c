@@ -1,63 +1,41 @@
-#include "Util.h"
+/*
+ *  Kernel DMA Protection Patcher (kdmap-patcher)
+ *  Copyright (C) 2020 Björn Ruytenberg <bjorn@bjornweb.nl>
+ *
+ *  SLICLoader
+ *  Copyright (C) 2013 wweber
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "util.h"
 #include <Protocol/LoadedImage.h>
 #include <Protocol/SimpleFileSystem.h>
 #include <Guid/FileInfo.h>
 #include <Library/DevicePathLib.h>
 
-void WaitForESC(EFI_SYSTEM_TABLE* systab)
+#include <Protocol/SimpleTextOut.h>
+
+
+#if defined(DEBUGZ)
+void _clearFb(IN EFI_SYSTEM_TABLE *SystemTable)
 {
-	for (;;)
-	{
-		UINTN idx;
-		systab->BootServices->WaitForEvent(1, systab->ConIn->WaitForKey, &idx);
-
-		EFI_INPUT_KEY key;
-
-		systab->ConIn->ReadKeyStroke(systab->ConIn, &key);
-
-		if (key.ScanCode == SCAN_ESC)
-		{
-			break;
-		}
-	}
+   SystemTable->ConOut->ClearScreen(SystemTable->ConOut);
 }
-
-void* Allocate(UINTN size, EFI_SYSTEM_TABLE* systab)
-{
-	void* data;
-	EFI_STATUS res = systab->BootServices->AllocatePool(EfiLoaderData, size,
-			&data);
-
-	if (res)
-	{
-		return NULL ;
-	}
-	else
-	{
-		return data;
-	}
-}
-
-void* AllocateACPI(UINTN size, EFI_SYSTEM_TABLE* systab)
-{
-	void* data;
-	EFI_STATUS res = systab->BootServices->AllocatePool(EfiACPIReclaimMemory,
-			size, &data);
-
-	if (res)
-	{
-		return NULL ;
-	}
-	else
-	{
-		return data;
-	}
-}
-
-void Free(void* mem, EFI_SYSTEM_TABLE* systab)
-{
-	systab->BootServices->FreePool(mem);
-}
+#else
+#define _clearFB(SystemTable) (void)0
+#endif
 
 EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 		CHAR16* filename, VOID** dataPtr, UINTN* size,
@@ -77,7 +55,7 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 
 	if (res)
 	{
-		ErrorPrint(L"Failed to get image protocol. (Error %d)\r\n", res);
+		_Print(L"Failed to get image protocol. (Error %d)\r\n", res);
 		return EFI_LOAD_ERROR ;
 	}
 
@@ -90,7 +68,7 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 
 	if (res)
 	{
-		ErrorPrint(L"Failed to get file system protocol. (Error %d)\r\n", res);
+		_Print(L"Failed to get file system protocol. (Error %d)\r\n", res);
 		return EFI_LOAD_ERROR ;
 	}
 
@@ -100,7 +78,7 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 
 	if (res)
 	{
-		ErrorPrint(L"Failed to open file volume. (Error %d)\r\n", res);
+		_Print(L"Failed to open file volume. (Error %d)\r\n", res);
 		return EFI_LOAD_ERROR ;
 	}
 
@@ -111,7 +89,7 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 	if (res)
 	{
 		//don't print error here
-		//ErrorPrint(L"Failed to open file '%s'. (Error %d)\r\n", filename, res);
+		//_Print(L"Failed to open file '%s'. (Error %d)\r\n", filename, res);
 		return EFI_NOT_FOUND ;
 	}
 
@@ -122,7 +100,7 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 
 	if (res != EFI_BUFFER_TOO_SMALL )
 	{
-		ErrorPrint(L"Failed to stat file '%s'. (Error %d)\r\n", filename, res);
+		_Print(L"Failed to stat file '%s'. (Error %d)\r\n", filename, res);
 		return EFI_NOT_FOUND ;
 	}
 
@@ -130,7 +108,7 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 
 	if (res)
 	{
-		ErrorPrint(L"Failed to allocate file info memory. (Error %d)\r\n", res);
+		_Print(L"Failed to allocate file info memory. (Error %d)\r\n", res);
 		return EFI_OUT_OF_RESOURCES ;
 	}
 
@@ -140,7 +118,7 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 	if (res)
 	{
 		BS->FreePool(file_info);
-		ErrorPrint(L"Failed to stat file '%s'. (Error %d)\r\n", filename, res);
+		_Print(L"Failed to stat file '%s'. (Error %d)\r\n", filename, res);
 		return EFI_NOT_FOUND ;
 	}
 
@@ -159,7 +137,7 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 
 	if (res)
 	{
-		ErrorPrint(L"Failed to allocate file data memory. (Error %d)\r\n", res);
+		_Print(L"Failed to allocate file data memory. (Error %d)\r\n", res);
 		return EFI_OUT_OF_RESOURCES ;
 	}
 
@@ -169,7 +147,7 @@ EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
 	if (res)
 	{
 		BS->FreePool(data);
-		ErrorPrint(L"Failed to read file '%s'. (Error %d)\r\n", filename, res);
+		_Print(L"Failed to read file '%s'. (Error %d)\r\n", filename, res);
 		return EFI_NOT_FOUND ;
 	}
 

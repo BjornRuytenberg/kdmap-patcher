@@ -1,5 +1,8 @@
 /*
- *  SLICLoader, an EFI program to modify ACPI tables before boot.
+ *  Kernel DMA Protection Patcher (kdmap-patcher)
+ *  Copyright (C) 2020 Björn Ruytenberg <bjorn@bjornweb.nl>
+ *
+ *  SLICLoader
  *  Copyright (C) 2013 wweber
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -16,27 +19,33 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SL_BOOT_H_
-#define SL_BOOT_H_
+#ifndef UTIL_H_
+#define UTIL_H_
 
 #include <Uefi.h>
 #include <Library/UefiLib.h>
-#include <Library/UefiApplicationEntryPoint.h>
 
-#include "Util.h"
+// Enable frame buffer operations by defining DEBUGZ
+#define DEBUGZ
+// or disable it by not defining it
+//#undef DEBUGZ
 
-/**
- * @file Boot.h
- *
- * Handles loading another boot manager.
- */
 
-/**
- * Loads and starts the standard boot manager.
- * @param ImageHandle The current image handle.
- * @param SystemTable The system table.
- * @return
- */
-EFI_STATUS Boot(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable);
+#if defined(DEBUGZ)
+void _clearFb(IN EFI_SYSTEM_TABLE *SystemTable);
+#else
+#define _clearFb(SystemTable) (void)0
+#endif
+
+#if defined(DEBUGZ)
+#define _Print(fmt, ...) Print((fmt), ##__VA_ARGS__)
+#else
+#define _Print(fmt, ...) (void)0
+#endif
+
+
+EFI_STATUS LoadFile(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* systab,
+		CHAR16* filename, void** dataPtr, UINTN* size,
+		EFI_DEVICE_PATH_PROTOCOL** dev_path);
 
 #endif

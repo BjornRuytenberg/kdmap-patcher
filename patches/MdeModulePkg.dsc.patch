@@ -1,0 +1,12 @@
+diff --git a/MdeModulePkg/MdeModulePkg.dsc b/MdeModulePkg/MdeModulePkg.dsc
+index 25aea3e2a4..264a837a9a 100644
+--- a/MdeModulePkg/MdeModulePkg.dsc
++++ b/MdeModulePkg/MdeModulePkg.dsc
+@@ -203,6 +203,7 @@
+   gEfiMdeModulePkgTokenSpaceGuid.PcdRecoveryFileName|L"FVMAIN.FV"
+ 
+ [Components]
++  MdeModulePkg/Application/kdmap-patcher/kdmap-patcher.inf
+   MdeModulePkg/Application/HelloWorld/HelloWorld.inf
+   MdeModulePkg/Application/DumpDynPcd/DumpDynPcd.inf
+   MdeModulePkg/Application/MemoryProfileInfo/MemoryProfileInfo.inf
