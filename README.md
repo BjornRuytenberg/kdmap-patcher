@@ -27,7 +27,7 @@ kdmap-patcher requires:
 
 ### Windows 10 build 1803 or later
 
-- [Download](https://github.com/BjornRuytenberg/tsap/releases) the latest kdmap-patcher release for Windows. Alternatively, you may want to consider [building](#using-visualuefi) a copy yourself.
+- [Build](#using-visualuefi) a copy of kdmap-patcher.
 - Open a Command Prompt with administrator privileges.
 - Mount the EFI system partition: `mountvol T: /S`.
 - From the release ZIP or your build folder, copy `kdmap-patcher.efi` to your EFI System Partition: `copy kdmap-patcher.efi T:\EFI\Microsoft\Boot`
@@ -43,7 +43,7 @@ kdmap-patcher requires:
 
 ### Linux kernel 5.0 or later
 
-- [Download](https://github.com/BjornRuytenberg/tsap/releases) the latest kdmap-patcher release. Alternatively, you may want to consider [building](#using-edk2) a copy yourself.
+- [Building](#using-edk2) a copy of kdmap-patcher.
 - From the release ZIP or your build folder, copy `kdmap-patcher.efi` to the folder `/boot/efi/EFI/boot` using root privileges.
 - Depending on your boot configuration, in the latter folder, you can either choose to:
 	- Configure your default boot entry in UEFI to reference `kdmap-patcher.efi` (recommended if supported by your UEFI), or
