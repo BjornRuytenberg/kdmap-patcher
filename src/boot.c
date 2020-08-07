@@ -21,11 +21,25 @@
 
 #include "boot.h"
 #include <Protocol/LoadedImage.h>
+#include <Guid/GlobalVariable.h>
+#include <Guid/ImageAuthentication.h>
+
+BOOLEAN GetSecureBootState()
+{
+	UINT8 *SecureBoot = NULL;
+	GetEfiGlobalVariable2(EFI_SECURE_BOOT_MODE_NAME, (VOID**)&SecureBoot, NULL);
+	if ((SecureBoot != NULL) && (*SecureBoot == SECURE_BOOT_MODE_ENABLE)) {
+		return TRUE;
+	}
+	return FALSE;
+}
 
 EFI_STATUS Boot(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *systab, CHAR16 boot_filename[])
 {
 	EFI_GUID LoadedImageProtocolGuid = EFI_LOADED_IMAGE_PROTOCOL_GUID;
 	EFI_STATUS res;
+
+	_Print(L"Secure Boot state: %d\r\n", GetSecureBootState());
 
 	//load boot file
 	void *data = NULL;
