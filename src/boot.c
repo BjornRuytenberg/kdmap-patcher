@@ -24,6 +24,22 @@
 #include <Guid/GlobalVariable.h>
 #include <Guid/ImageAuthentication.h>
 
+// XXX: code borrowed from GPLv3 xen patch (modified)
+void efi_shim_lock(VOID *Buffer, UINT32 Size, EFI_SYSTEM_TABLE *systab)
+{
+    static EFI_GUID shim_lock_guid = SHIM_LOCK_PROTOCOL_GUID;
+    EFI_SHIM_LOCK_PROTOCOL *shim_lock;
+    EFI_STATUS status;
+
+    if ( !EFI_ERROR(systab->BootServices->LocateProtocol(&shim_lock_guid, NULL, 
+                    (void **)&shim_lock)) &&
+                    (status = shim_lock->Verify(Buffer, Size))
+                    != EFI_SUCCESS ) {
+        _Print(L"Image could not be verified (%i)", status);
+    }
+}
+// XXX: end code borrowed from GPLv3 patch
+
 BOOLEAN GetSecureBootState()
 {
 	UINT8 *SecureBoot = NULL;
@@ -38,8 +54,9 @@ EFI_STATUS Boot(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *systab, CHAR16 boot_fi
 {
 	EFI_GUID LoadedImageProtocolGuid = EFI_LOADED_IMAGE_PROTOCOL_GUID;
 	EFI_STATUS res;
-
-	_Print(L"Secure Boot state: %d\r\n", GetSecureBootState());
+	BOOLEAN SbState = GetSecureBootState();
+	
+	_Print(L"Secure Boot state: %d\r\n", SbState);
 
 	//load boot file
 	void *data = NULL;
@@ -70,6 +87,14 @@ EFI_STATUS Boot(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *systab, CHAR16 boot_fi
 		_Print(L"Failed to get image info protocol. (Error %d)\r\n", res);
 		return EFI_LOAD_ERROR;
 	}
+
+	if(SbState)
+	{
+		_Print(L"Pre-efi_shim_lock\n");
+		efi_shim_lock(data, data_size, systab);
+		_Print(L"Post-efi_shim_lock\n");
+	}
+	_Print(L"Pre-LoadImage\n");
 
 	//Load the image
 	EFI_HANDLE new_img_handle;

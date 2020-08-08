@@ -29,4 +29,19 @@
 
 EFI_STATUS Boot(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *systab, CHAR16 boot_filename[]);
 
+// From Xen: https://lists.xen.org/archives/html/xen-devel/2017-07/msg00981.html
+// from Suse: https://build.opensuse.org/package/view_file/openSUSE:12.3/xen/26262-x86-EFI-secure-shim.patch?expand=1
+void efi_shim_lock(VOID *Buffer, UINT32 Size, EFI_SYSTEM_TABLE *systab);
+#define SHIM_LOCK_PROTOCOL_GUID { 0x605dab50, 0xe046, 0x4300, {0xab, 0xb6, 0x3d, 0xd8, 0x10, 0xdd, 0x8b, 0x23} }
+
+typedef EFI_STATUS
+(/* _not_ EFIAPI */ *EFI_SHIM_LOCK_VERIFY) (
+    IN VOID *Buffer,
+    IN UINT32 Size);
+
+typedef struct {
+    EFI_SHIM_LOCK_VERIFY Verify;
+} EFI_SHIM_LOCK_PROTOCOL;
+// End code import from GPL patches
+
 #endif
