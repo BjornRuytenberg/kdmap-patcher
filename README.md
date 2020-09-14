@@ -71,7 +71,7 @@ kdmap-patcher can be built against EDK2 and VisualUefi. Other toolchains, such a
 	- To install, run `make linux-efi-menu-install`. Alternatively, refer to the [Usage](#linux-kernel-50-or-later) section.
 - Optionally, to debug in a QEMU instance:
 	- Ensure you have all dependencies installed for QEMU. For example, on Ubuntu/Debian: `sudo apt-get install qemu-system-x86 ovmf`
-	- Execute `make run`
+	- Execute `make linux-run`
 - To uninstall, simply run `make linux-efi-menu-uninstall`.
 
 ### Using VisualUefi
